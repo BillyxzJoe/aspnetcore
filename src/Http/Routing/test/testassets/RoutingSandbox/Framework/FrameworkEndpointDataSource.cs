@@ -83,6 +83,9 @@ internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConven
     {
         _conventions.Add(convention);
     }
+
+    public void Finally(Action<EndpointBuilder> finalConvention) { }
+
 }
 
 internal class HubMethod

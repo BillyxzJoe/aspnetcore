@@ -39,4 +39,10 @@ public sealed class ControllerActionEndpointConventionBuilder : IEndpointConvent
             _conventions.Add(convention);
         }
     }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="convention"></param>
+    public void Finally(Action<EndpointBuilder> convention) { }
 }

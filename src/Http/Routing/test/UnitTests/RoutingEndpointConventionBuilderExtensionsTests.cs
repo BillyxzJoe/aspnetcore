@@ -36,5 +36,7 @@ public class RoutingEndpointConventionBuilderExtensionsTests
         {
             Conventions.Add(convention);
         }
+
+        public void Finally(Action<EndpointBuilder> finalConvention) { }
     }
 }

@@ -51,4 +51,10 @@ public sealed class RouteHandlerBuilder : IEndpointConventionBuilder
             }
         }
     }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="finalConvention"></param>
+    public void Finally(Action<EndpointBuilder> finalConvention) { }
 }

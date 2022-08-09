@@ -153,6 +153,8 @@ public class OpenApiRouteHandlerBuilderExtensionsTest
             convention(this);
         }
 
+        public void Finally(Action<EndpointBuilder> finalConvention) { }
+
         public override Endpoint Build() => throw new NotImplementedException();
     }
 }

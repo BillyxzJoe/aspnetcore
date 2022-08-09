@@ -41,9 +41,11 @@ public class CompositeEndpointDataSourceTest
 
         var prefix = RoutePatternFactory.Parse("/");
         var conventions = Array.Empty<Action<EndpointBuilder>>();
+        var finalConventions = Array.Empty<Action<EndpointBuilder>>();
         var applicationServices = new ServiceCollection().BuildServiceProvider();
 
-        var groupedEndpoints = compositeDataSource.GetGroupedEndpoints(new RouteGroupContext(prefix, conventions, applicationServices));
+        var groupedEndpoints = compositeDataSource.GetGroupedEndpoints(new RouteGroupContext
+        { Prefix = prefix, Conventions = conventions, FinalConventions = finalConventions, ApplicationServices = applicationServices });
 
         var resolvedGroupEndpoints = Assert.Single(dataSource.ResolvedGroupedEndpoints);
         Assert.NotSame(groupedEndpoints, resolvedGroupEndpoints);
@@ -178,7 +180,7 @@ public class CompositeEndpointDataSourceTest
 
         var endpoint2 = CreateEndpoint("/b");
 
-        // Update ObservableCollection with a new DynamicEndpointDataSource 
+        // Update ObservableCollection with a new DynamicEndpointDataSource
         var dataSource2 = new DynamicEndpointDataSource(endpoint2);
         observableCollection.Add(dataSource2);
 
@@ -188,7 +190,7 @@ public class CompositeEndpointDataSourceTest
         token = Assert.IsType<CancellationChangeToken>(changeToken2);
         Assert.False(token.HasChanged);
 
-        // Update the newly added DynamicEndpointDataSource 
+        // Update the newly added DynamicEndpointDataSource
         var endpoint3 = CreateEndpoint("/c");
         dataSource2.AddEndpoint(endpoint3);
 
@@ -262,8 +264,9 @@ public class CompositeEndpointDataSourceTest
         {
             b => b.Metadata.Add(metadata),
         };
+        var finalConventions = Array.Empty<Action<EndpointBuilder>>();
 
-        var context = new RouteGroupContext(prefix, conventions, applicationServices);
+        var context = new RouteGroupContext { Prefix = prefix, Conventions = conventions, FinalConventions = finalConventions, ApplicationServices = applicationServices };
         var groupedEndpoints = compositeDataSource.GetGroupedEndpoints(context);
 
         var receivedContext = Assert.Single(dataSource.ReceivedRouteGroupContexts);

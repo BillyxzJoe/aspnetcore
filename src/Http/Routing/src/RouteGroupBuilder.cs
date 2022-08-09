@@ -34,6 +34,7 @@ public sealed class RouteGroupBuilder : IEndpointRouteBuilder, IEndpointConventi
     IApplicationBuilder IEndpointRouteBuilder.CreateApplicationBuilder() => _outerEndpointRouteBuilder.CreateApplicationBuilder();
     ICollection<EndpointDataSource> IEndpointRouteBuilder.DataSources => _dataSources;
     void IEndpointConventionBuilder.Add(Action<EndpointBuilder> convention) => _conventions.Add(convention);
+    void IEndpointConventionBuilder.Finally(Action<EndpointBuilder> finalConvention) { }
 
     private sealed class GroupEndpointDataSource : EndpointDataSource, IDisposable
     {
@@ -83,7 +84,7 @@ public sealed class RouteGroupBuilder : IEndpointRouteBuilder, IEndpointConventi
             var fullPrefix = RoutePatternFactory.Combine(prefix, _routeGroupBuilder._partialPrefix);
             // Apply conventions passed in from the outer group first so their metadata is added earlier in the list at a lower precedent.
             var combinedConventions = RoutePatternFactory.CombineLists(conventions, _routeGroupBuilder._conventions);
-            return new RouteGroupContext(fullPrefix, combinedConventions, applicationServices);
+            return new RouteGroupContext { Prefix = fullPrefix, Conventions = combinedConventions, ApplicationServices = applicationServices };
         }
 
         private IReadOnlyList<Endpoint> SelectEndpointsFromAllDataSources(RouteGroupContext context)

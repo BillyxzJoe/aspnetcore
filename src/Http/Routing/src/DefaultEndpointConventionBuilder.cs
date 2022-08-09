@@ -11,11 +11,13 @@ internal sealed class DefaultEndpointConventionBuilder : IEndpointConventionBuil
     internal EndpointBuilder EndpointBuilder { get; }
 
     private List<Action<EndpointBuilder>>? _conventions;
+    private readonly List<Action<EndpointBuilder>> _finalConventions;
 
     public DefaultEndpointConventionBuilder(EndpointBuilder endpointBuilder)
     {
         EndpointBuilder = endpointBuilder;
         _conventions = new();
+        _finalConventions = new();
     }
 
     public void Add(Action<EndpointBuilder> convention)
@@ -30,6 +32,11 @@ internal sealed class DefaultEndpointConventionBuilder : IEndpointConventionBuil
         conventions.Add(convention);
     }
 
+    public void Finally(Action<EndpointBuilder> finalConvention)
+    {
+       _finalConventions.Add(finalConvention);
+    }
+
     public Endpoint Build()
     {
         // Only apply the conventions once
@@ -41,6 +48,11 @@ internal sealed class DefaultEndpointConventionBuilder : IEndpointConventionBuil
             {
                 convention(EndpointBuilder);
             }
+        }
+
+        foreach (var finalConvention in _finalConventions)
+        {
+            finalConvention(EndpointBuilder);
         }
 
         return EndpointBuilder.Build();

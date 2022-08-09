@@ -14,6 +14,7 @@
     <PackageTags>aspnetcore;routing</PackageTags>
     <IsPackable>false</IsPackable>
     <IsTrimmable>true</IsTrimmable>
+    <NoWarn>RS0017;RS0016</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

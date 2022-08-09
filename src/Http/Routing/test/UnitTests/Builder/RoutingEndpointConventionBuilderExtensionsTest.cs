@@ -149,6 +149,29 @@ public class RoutingEndpointConventionBuilderExtensionsTest
         Assert.Equal("SomeEndpointGroupName", endpointGroupName.EndpointGroupName);
     }
 
+    [Fact]
+    public void FinalConventions_RunAfterOtherConventions()
+    {
+        // Arrange
+        var builder = CreateBuilder();
+
+        // Act
+        builder.WithMetadata("test-metadata");
+        builder.Finally(inner => {
+            if (inner.Metadata.Any(md => md is string smd && smd == "test-metadata"))
+            {
+                inner.Metadata.Add("found-previous-metadata");
+            }
+        });
+
+        // Assert
+        var endpoint = builder.Build();
+
+        var metadata = endpoint.Metadata.OfType<string>().ToList();
+        Assert.Contains("test-metadata", metadata);
+        Assert.Contains("found-previous-metadata", metadata);
+    }
+
     private TestEndpointConventionBuilder CreateBuilder()
     {
         var conventionBuilder = new DefaultEndpointConventionBuilder(new RouteEndpointBuilder(
@@ -173,6 +196,8 @@ public class RoutingEndpointConventionBuilderExtensionsTest
         {
             _endpointConventionBuilder.Add(convention);
         }
+
+        public void Finally(Action<EndpointBuilder> finalConvention) { }
 
         public Endpoint Build()
         {

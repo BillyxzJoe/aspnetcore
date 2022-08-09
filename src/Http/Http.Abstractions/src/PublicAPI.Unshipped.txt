@@ -6,6 +6,7 @@ abstract Microsoft.AspNetCore.Http.EndpointFilterInvocationContext.GetArgument<T
 abstract Microsoft.AspNetCore.Http.EndpointFilterInvocationContext.HttpContext.get -> Microsoft.AspNetCore.Http.HttpContext!
 Microsoft.AspNetCore.Builder.EndpointBuilder.ApplicationServices.get -> System.IServiceProvider!
 Microsoft.AspNetCore.Builder.EndpointBuilder.ApplicationServices.set -> void
+Microsoft.AspNetCore.Builder.IEndpointConventionBuilder.Finally(System.Action<Microsoft.AspNetCore.Builder.EndpointBuilder!>! convention) -> void
 Microsoft.AspNetCore.Http.AsParametersAttribute
 Microsoft.AspNetCore.Http.AsParametersAttribute.AsParametersAttribute() -> void
 Microsoft.AspNetCore.Http.CookieBuilder.Extensions.get -> System.Collections.Generic.IList<string!>!
